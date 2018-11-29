@@ -246,6 +246,17 @@ function calendar_day_clicked( td_element )
    console.log( "\n " + td_element.innerHTML ) ;
 }
 
+
+function minus_one_year()
+{
+   calendar_to_show.decrement_year();
+   document.getElementById("calendar_div_id").innerHTML = calendar_to_show.to_table_element();
+}
+function plus_one_year()
+{
+   calendar_to_show.increment_year();
+   document.getElementById("calendar_div_id").innerHTML = calendar_to_show.to_table_element();
+}
 </script>
 
 </head>
@@ -255,6 +266,8 @@ function calendar_day_clicked( td_element )
    <div id=calendar_area>
 
       <div id=relatively_positioned_buttons>
+         <button onclick="plus_one_year()">+</button>
+         <button onclick="minus_one_year()">-</button>
          <button onclick="show_previous_month_calendar()">&lt;</button>
          <button onclick="show_next_month_calendar()">&gt;</button>
       </div>
