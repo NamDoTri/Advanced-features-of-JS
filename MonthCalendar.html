@@ -290,7 +290,10 @@ function initialize_page()
 
 function calendar_day_clicked( td_element )
 {
-   console.log( "\n " + td_element.innerHTML ) ;
+   console.log( "\n " + td_element.innerHTML) ;
+   var that_day = td_element;
+   var chronological_distance = that_day.get_distance_to(this.current_date);
+   console.log("\n " + chronological_distance);
 }
 
 
