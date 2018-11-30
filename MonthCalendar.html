@@ -202,8 +202,55 @@ class EnglishCalendar
 
 // The EnglishCalendar object that we create here will show the current
 // month, according to the computer time settings.
+class SpanishCalendar extends EnglishCalendar
+{
+   constructor( given_year, given_month )
+   {
+      // calling the superclass constructor
+      super( given_year, given_month ) ;
 
-var calendar_to_show = new EnglishCalendar() ;
+      var spanish_names_of_months  =
+
+         [ "Enero", "Febrero", "Marzo", "Abril",
+           "Mayo", "Junio", "Julio", "Agosto",
+           "Septiembre", "Octubre", "Noviembre", "Diciembre" ] ;
+
+      var spanish_week_description  =
+
+         [ "Sem",  "Lun",  "Mar",  "Mie",  "Jue",  "Vie",  "Sab",  "Dom" ] ;
+
+      this.names_of_months   =  spanish_names_of_months ;
+      this.week_description  =  spanish_week_description ;
+   }
+} // END OF SpanishCalendar DECLARATION
+
+// Next we specify a subclass named GermanCalendar
+
+class GermanCalendar extends EnglishCalendar
+{
+   constructor( given_year, given_month )
+   {
+      // calling the superclass constructor
+      super( given_year, given_month ) ;
+
+      var german_names_of_months  =
+
+         [ "Januar", "Februar", "Marz", "April",
+           "Mai", "Juni", "Juli", "August",
+           "September", "Oktober", "November", "Dezember" ] ;
+
+      var german_week_description  =
+
+         [ "Whe",  "Mon",  "Die",  "Mit",  "Don",  "Fre",  "Sam",  "Son" ] ;
+
+      this.names_of_months   =  german_names_of_months ;
+      this.week_description  =  german_week_description ;
+   }
+}  // END OF GermanCalendar DECLARATION
+
+const calendars =[new EnglishCalendar(), new SpanishCalendar(), new GermanCalendar()];
+var calendarIndex = 0;
+var calendar_to_show = calendars[calendarIndex] ;
 
 function show_previous_month_calendar()
 {
@@ -257,6 +304,16 @@ function plus_one_year()
    calendar_to_show.increment_year();
    document.getElementById("calendar_div_id").innerHTML = calendar_to_show.to_table_element();
 }
+function changeLanguage()
+{
+   calendarIndex++;
+   if (calendarIndex >= calendars.length )
+   {
+      calendarIndex = 0;
+   }
+   calendar_to_show = calendars[calendarIndex];
+   document.getElementById("calendar_div_id").innerHTML = calendar_to_show.to_table_element();
+}
 </script>
 
 </head>
@@ -266,8 +323,9 @@ function plus_one_year()
    <div id=calendar_area>
 
       <div id=relatively_positioned_buttons>
-         <button onclick="plus_one_year()">+</button>
+         <button id="changeLanguage" onclick="changeLanguage()" >L</button>
          <button onclick="minus_one_year()">-</button>
+         <button onclick="plus_one_year()">+</button>
          <button onclick="show_previous_month_calendar()">&lt;</button>
          <button onclick="show_next_month_calendar()">&gt;</button>
       </div>
