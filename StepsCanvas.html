@@ -88,8 +88,23 @@
 
          step_position_x = step_position_x + step_size ;
       }
+      context.stroke();
 
-      context.stroke() ;  // This will draw all the lines of the path.
+      //drawing circles
+      step_position_x = 420 ;
+      step_position_y = 320 ;
+      for ( let step_counter = 0; step_counter < number_of_steps_to_make; step_counter++)
+      {
+         for ( let i = 0; i < number_of_steps_to_make - step_counter; i++)
+         {
+            context.beginPath();
+            context.arc( (step_position_x - 20) + 40*i, step_position_y + 20, step_size / 2,0, 2*Math.PI);
+            context.closePath();
+            context.fill();
+         }
+         step_position_x += 40;
+         step_position_y -= 40;
+      }
    }
    
 </script> <!-- End of JavaScript code. -->
