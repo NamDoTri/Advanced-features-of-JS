@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<!-- SinglePictureCanvas.html Copyright (c) Kari Laitinen
+
+   2012-03-15 This file was created for http://www.naturalprogramming.com/
+   2014-02-06 Last modification.
+
+   This program shows how images can be drawn on a canvas.
+
+   Useful web pages are:
+     http://www.w3schools.com/tags/ref_canvas.asp
+     http://www.w3schools.com/tags/canvas_drawimage.asp
+
+-->
+
+<html>
+<head>
+<meta charset="ISO-8859-1">
+
+<title>SHOWING A PICTURE IN DIFFERENT SIZES"</title>
+
+<script type="text/javascript">
+
+var picture_to_show = new Image() ;
+
+picture_to_show.src = 
+        "./basics/images/gauguin_two_women_on_the_beach_1891.jpg" ;  
+
+function draw_on_canvas()
+{
+   var canvas = document.getElementById( "picture_canvas" ) ;
+   var context = canvas.getContext( "2d" ) ;
+
+   // We'll fill the entire canvas with light color, which overdraws
+   // the previous drawings.
+
+   context.fillStyle = "rgb( 255, 255, 210 )" ;  // light yellow
+
+   context.fillRect( 0, 0, canvas.width, canvas.height ) ;
+
+   var picture_width  = picture_to_show.width ;
+   var picture_height = picture_to_show.height ;
+   console.log(picture_width + "   " + picture_height);
+   var picture_position_x  =  180 ;
+   var picture_position_y  =  144 ;
+
+   //  The following statement shows the picture in its natural size.
+
+   context.drawImage( picture_to_show, picture_position_x,
+                                       picture_position_y ) ;
+
+   /*picture_position_x  =  picture_position_x  +  picture_width + 20 ;
+
+   //  Next we'll show a smaller version of the picture.
+
+   context.drawImage( picture_to_show,
+                      picture_position_x, picture_position_y,
+                      picture_width / 2, picture_height / 2 ) ;
+
+   picture_position_y  =  picture_position_y  +  picture_height / 2  +  20 ;
+
+   //  The last statement shows the right half of the picture so that
+   //  it is positioned below the previously drawn picture.
+   //  You can think that the parameters below first specify an image,
+   //  then they specify a rectangle within the image, and then they
+   //  specify a rectangle on the canvas. Image data is copied from the
+   //  rectangle inside the image to the rectangle on the canvas.
+
+   context.drawImage( picture_to_show,
+                      picture_width / 2, 0, // coordinates inside the picture
+                      picture_width / 2, picture_height,
+                      picture_position_x, picture_position_y,
+                      picture_width / 2, picture_height ) ;
+*/
+}
+
+</script> <!-- End of JavaScript code. -->
+
+<style type="text/css">
+
+   #centered
+   {
+      width:  960px;
+      height: 744px;
+      margin: 30px auto;    /* top and bottom margins are 30p;
+                               right and left margins are automatic */
+      border: 1px solid black;
+   }
+
+</style>  <!-- End of CSS style definitions. -->
+</head>
+
+<body onload="draw_on_canvas()">
+
+   <div id=centered>
+      <canvas id=picture_canvas width=960 height=744>
+      </canvas>
+   </div>
+</body>
+</html>
