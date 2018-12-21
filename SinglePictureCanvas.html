@@ -33,10 +33,15 @@ function draw_on_canvas()
 
    // We'll fill the entire canvas with light color, which overdraws
    // the previous drawings.
+   //context.fillStyle = "white";
+   
 
    context.fillStyle = "rgb( 255, 255, 210 )" ;  // light yellow
 
    context.fillRect( 0, 0, canvas.width, canvas.height ) ;
+
+   context.fillStyle = "rgb( 230, 179, 116)";
+   context.fillRect( 140,100, 680, 544);
 
    var picture_width  = picture_to_show.width ;
    var picture_height = picture_to_show.height ;
@@ -45,7 +50,7 @@ function draw_on_canvas()
    var picture_position_y  =  144 ;
 
    //  The following statement shows the picture in its natural size.
-
+   
    context.drawImage( picture_to_show, picture_position_x,
                                        picture_position_y ) ;
 
