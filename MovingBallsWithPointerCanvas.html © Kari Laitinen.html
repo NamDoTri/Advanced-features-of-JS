@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!-- saved from url=(0079)http://www.naturalprogramming.com/html/canvas/MovingBallsWithPointerCanvas.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+<title>MovingBallsWithPointerCanvas.html � Kari Laitinen</title>
+<!--
+   http://www.naturalprogramming.com/
+
+   2012-02-27 File created.
+   2016-02-29 Last modification.
+
+
+   This program draws three Ball objects onto the screen.
+   It is possible to move these balls with the mouse or
+   some other pointing device. The Ball objects have a method 
+   to find out whether a 'clicked' point is inside the
+   ball. In addition the Ball objects have methods for moving
+   the ball.
+
+   During execution the file Ball.js must be in the same
+   folder (directory) with this file.
+
+-->
+
+<script src="./Ball.js">
+</script><style></style>
+
+<script type="text/javascript">
+
+//  Now the 'main' program begins.
+
+var first_ball  = new Ball( 200, 300, "red" ) ;
+var second_ball = new Ball( 400, 300, "green" ) ;
+var third_ball  = new Ball( 600, 300, "blue" ) ;
+var forth_ball = new Ball (400, 500, "Chocolate");
+
+var ballsOnScreen = [first_ball, second_ball, third_ball, forth_ball];
+var ball_being_moved  =  null ;
+
+// In this program we speak about pointer positions instead
+// of mouse or cursor positions because it is possible
+// that the balls can be pointed with some other devices
+// than a mouse.
+
+var previous_pointer_position_x  =  0 ;
+var previous_pointer_position_y  =  0 ;
+
+function on_mouse_down( event )
+{
+   var pointer_position_x = event.offsetX ;
+   var pointer_position_y = event.offsetY ;
+   
+   if ( event.ctrlKey ){
+      ballsOnScreen.push( new Ball (pointer_position_x, pointer_position_y, "#" + String( Math.round(Math.random()*16777215).toString(16) ) ) );
+   }else{
+      var ballIndex = ballsOnScreen.length-1;
+      var searchForClickedBallReady = false;
+
+      while (searchForClickedBallReady == false){
+         if ( ballsOnScreen[ballIndex].contains_point(pointer_position_x, pointer_position_y)){
+            ballsOnScreen[ballIndex].activate_ball();
+            ball_being_moved = ballsOnScreen[ballIndex];
+            searchForClickedBallReady = true;
+         }
+         ballIndex--;
+      }
+
+      if (ball_being_moved != null){
+         var indexOfBallBeingMoved = ballsOnScreen.indexOf(ball_being_moved);
+         var lastBallMoved = ballsOnScreen.splice(indexOfBallBeingMoved,1)[0] ;
+         ballsOnScreen.push( lastBallMoved );
+      }
+
+      previous_pointer_position_x  =  pointer_position_x ;
+      previous_pointer_position_y  =  pointer_position_y ;
+   }
+
+   draw_on_canvas() ;
+}
+
+
+function on_mouse_move( event )
+{
+   if ( ball_being_moved  !=  null )
+   {
+      var new_pointer_position_x = event.offsetX ;
+      var new_pointer_position_y = event.offsetY ;
+
+      var pointer_movement_x  =  new_pointer_position_x
+                                -  previous_pointer_position_x ;
+
+      var pointer_movement_y  =  new_pointer_position_y 
+                                -  previous_pointer_position_y ;
+
+      previous_pointer_position_x  =  new_pointer_position_x ;
+      previous_pointer_position_y  =  new_pointer_position_y ;
+
+      ball_being_moved.move_this_ball( pointer_movement_x, 
+                                       pointer_movement_y ) ;
+
+      draw_on_canvas() ;
+   }
+}
+
+function on_mouse_up( event )
+{
+   if ( ball_being_moved  !=  null )
+   {
+      ball_being_moved.deactivate_ball() ;
+      ball_being_moved  =  null ;
+
+      draw_on_canvas() ;
+   }
+}
+
+function draw_on_canvas()
+{
+   var canvas = document.getElementById( "canvas_for_balls" ) ;
+   var context = canvas.getContext("2d") ;
+
+   // We'll first fill the entire canvas with light color.
+
+   context.fillStyle = "LightYellow" ;
+   context.fillRect( 0, 0, canvas.width, canvas.height ) ;
+
+   for (let ballIndex of ballsOnScreen){
+      ballIndex.draw(context);
+   }
+}
+
+</script>
+
+<style type="text/css">
+
+   #centered
+   {
+      width: 800px;
+      height: 600px;
+      margin: 30px auto;    /* top and bottom margins are 30p;
+                               right and left margins are automatic */
+      border: 1px solid black;
+   }
+
+</style>
+</head>
+
+<body onload="draw_on_canvas()">
+
+   <div id="centered">
+      <canvas id="canvas_for_balls" width="800" height="600" onmousedown="on_mouse_down( event )" onmousemove="on_mouse_move( event )" onmouseup="on_mouse_up( event )">
+      </canvas>
+
+   </div>
+
+
+
+
+<!-- NOTES:
+
+   - It seems that onmousedrag events do not work.
+
+--></body></html>
