@@ -50,8 +50,11 @@ function on_mouse_down( event )
    var pointer_position_x = event.offsetX ;
    var pointer_position_y = event.offsetY ;
    
-   if ( event.ctrlKey ){
-      ballsOnScreen.push( new Ball (pointer_position_x, pointer_position_y, "#" + String( Math.round(Math.random()*16777215).toString(16) ) ) );
+   if(event.shiftKey && event.ctrlKey){
+      ballsOnScreen.push( new MulticoloredBall(pointer_position_x, pointer_position_y, "#" + String( Math.round(Math.random()*16777215).toString(16)), "#" + String( Math.round(Math.random()*16777215).toString(16)), "#" + String( Math.round(Math.random()*16777215).toString(16)) ) )
+   }
+   else if ( event.ctrlKey ){
+      ballsOnScreen.push( new Ball (pointer_position_x, pointer_position_y, "#" + String( Math.round(Math.random()*16777215).toString(16)) ) );
    }else{
       var ballIndex = ballsOnScreen.length-1;
       var searchForClickedBallReady = false;
