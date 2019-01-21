@@ -161,18 +161,19 @@ var GROUND_LEVEL_Y  =  540 ;
 
 var gun = new Gun( 100, GROUND_LEVEL_Y, 60 ) ;
 
-var flying_shell = gun.fire() ;
+var flying_shells = [] ;
+flying_shells.push(gun.fire());
 
 function on_mouse_down( event )
 {
-   flying_shell = gun.fire() ;
+   flying_shells.push(gun.fire()) ;
 }
 
 function on_key_down( event )
 {
    switch(event.keyCode)
    {
-      case 0x20: flying_shell = gun.fire(); break;
+      case 0x20: flying_shells.push(gun.fire()); break;
       case 38: gun.raise_barrel(); break;
       case 40: gun.lower_barrel(); break; 
    }
@@ -191,9 +192,11 @@ function draw_on_canvas()
    context.fillRect( 0, GROUND_LEVEL_Y,
                      canvas.width, canvas.height - GROUND_LEVEL_Y ) ;
 
-   if ( flying_shell != null )
+   if ( flying_shells.length != 0 )
    {
-      flying_shell.draw( context ) ;
+      for(let shell of flying_shells){
+         shell.draw(context);
+      }
    }
 
    gun.draw( context ) ;
@@ -205,9 +208,11 @@ function run_this_application() // This is the 'game loop'
    // object, but, nevertheless, it is good to have these kinds of tests
    // in programs.
 
-   if ( flying_shell != null )
+   if ( flying_shells.length != 0 )
    {
-      flying_shell.move() ;
+      for(shell of flying_shells){
+         shell.move();
+      }
    }
 
    draw_on_canvas() ;
