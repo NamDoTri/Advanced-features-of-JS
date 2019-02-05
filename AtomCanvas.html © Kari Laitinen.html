@@ -164,6 +164,19 @@ function draw_on_canvas()
 
    context.translate( canvas.width / 2, canvas.height / 2 ) ;
 
+   //////Drawing horizontal orbit
+   stroke_oval( context, 0, 0, 400, 120 ) ; // drawing the orbit
+
+   context.fillStyle = "white" ; // color for red electron
+
+   context.beginPath() ;
+   context.arc( electron_position_x, electron_position_y,
+                6, 0, 2 * Math.PI, true ) ;
+   context.closePath() ;
+   context.fill() ;  // drawing an electron
+
+
+   /////second orbit
    context.rotate( Math.PI / 4 ) ;  // 45 degrees clockwise
 
    stroke_oval( context, 0, 0, 400, 120 ) ; // drawing the orbit
@@ -176,7 +189,9 @@ function draw_on_canvas()
    context.closePath() ;
    context.fill() ;  // drawing an electron
 
-   context.rotate( - Math.PI / 2 ) ;  // 90 degrees counter-clockwise
+
+   /////// Third one
+   context.rotate( Math.PI / 4 ) ;  // 90 degrees counter-clockwise
 
    stroke_oval( context, 0, 0, 400, 120 ) ; // drawing the orbit
 
@@ -188,7 +203,18 @@ function draw_on_canvas()
    context.closePath() ;
    context.fill() ;  // drawing an electron
 
+
+   //// Forth one
    context.rotate( Math.PI / 4 ) ;  // 45 degrees clockwise
+   stroke_oval( context, 0, 0, 400, 120 ) ; // drawing the orbit
+
+   context.fillStyle = "yellow" ; // color for blue electron
+
+   context.beginPath() ;
+   context.arc( electron_position_x, electron_position_y,
+                6, 0, 2 * Math.PI, true ) ;
+   context.closePath() ;
+   context.fill() ;  // drawing an electron
 
    upper_left_proton.draw( context ) ;
    lower_left_neutron.draw( context ) ;
