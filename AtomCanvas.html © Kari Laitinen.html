@@ -50,8 +50,8 @@ class NucleusParticle
 
       var particle_gradient_color = 
 
-         given_context.createLinearGradient( -PARTICLE_RADIUS, -PARTICLE_RADIUS,
-                                              PARTICLE_RADIUS, PARTICLE_RADIUS ) ;
+         given_context.createLinearGradient( PARTICLE_RADIUS, -PARTICLE_RADIUS,
+                                             -PARTICLE_RADIUS, PARTICLE_RADIUS ) ;
 
       particle_gradient_color.addColorStop( 0, "white" ) ;
       particle_gradient_color.addColorStop( 1, this.particle_color ) ;
@@ -164,7 +164,7 @@ function draw_on_canvas()
 
    context.translate( canvas.width / 2, canvas.height / 2 ) ;
 
-   //////Drawing horizontal orbit
+   //////Drawing first horizontal orbit
    stroke_oval( context, 0, 0, 400, 120 ) ; // drawing the orbit
 
    context.fillStyle = "white" ; // color for red electron
@@ -215,6 +215,8 @@ function draw_on_canvas()
                 6, 0, 2 * Math.PI, true ) ;
    context.closePath() ;
    context.fill() ;  // drawing an electron
+
+   context.rotate(- 3*Math.PI / 4);
 
    upper_left_proton.draw( context ) ;
    lower_left_neutron.draw( context ) ;
