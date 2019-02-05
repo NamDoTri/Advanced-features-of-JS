@@ -40,6 +40,12 @@ class NucleusParticle
 
       this.particle_color = given_particle_color ;
    }
+   set_color(){
+      var color = "000000" + Math.round( Math.random() * 0xFFFFFF ).toString(16);
+      color = color.slice(color.length -6);
+      this.particle_color = "#" + color;
+      //return this.partical_color;
+   }
 
    draw( given_context )
    {
@@ -55,6 +61,7 @@ class NucleusParticle
 
       particle_gradient_color.addColorStop( 0, "white" ) ;
       particle_gradient_color.addColorStop( 1, this.particle_color ) ;
+      console.log(this.particle_color);
 
       given_context.fillStyle = particle_gradient_color ;
 
@@ -248,6 +255,11 @@ function draw_on_canvas()
       total_time -= 1000;
       frames_per_second = frames_during_last_second ;
       frames_during_last_second = 0 ;
+      upper_left_proton.set_color() ;
+      lower_left_neutron.set_color() ;
+      upper_right_neutron.set_color() ;
+      lower_right_proton.set_color() ;
+
    }
 
    frames_during_last_second ++ ;
