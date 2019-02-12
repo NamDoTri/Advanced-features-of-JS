@@ -515,6 +515,14 @@ function run_this_application()
    setTimeout( "run_this_application()", 20 ) ;
 }
 
+var mouseDown = (event) => {
+   for(ball of game_balls){
+      if(ball.contains_point(event.offsetX, event.offsetY)){
+         ball.explode_ball();
+      }
+   }
+}
+
 </script> <!-- End of JavaScript code. -->
 
 <style type="text/css">
@@ -531,7 +539,7 @@ function run_this_application()
 </style>  <!-- End of CSS style definitions. -->
 </head>
 
-<body onload="run_this_application()" onkeydown="on_key_down( event )">
+<body onload="run_this_application()" onmousedown="mouseDown( event )">
 
    <div id="centered">
       <canvas id="bouncing_ball_canvas" width="800" height="600">
