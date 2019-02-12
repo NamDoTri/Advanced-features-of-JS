@@ -28,35 +28,82 @@ function on_mouse_down( event )
          text_to_show = "South-East";
       }
    }
-   draw_on_canvas() ;   // This call updates the screen.
+   draw_on_canvas(text_to_show) ;   // This call updates the screen.
 }
-
-function draw_on_canvas()
+function onMouseMove(event)
+{
+   var text_to_show = "";
+   var clicked_point_x = event.clientX;
+   var clicked_point_y = event.clientY;
+   if ( clicked_point_x < 300 )
+   {
+      if ( clicked_point_y < 250) 
+      {
+         text_to_show = "North-West";
+      }else{
+         text_to_show = "South-West";
+      }
+   }else{
+      if ( clicked_point_y < 250) 
+      {
+         text_to_show = "North-East";
+      }else{
+         text_to_show = "South-East";
+      }
+   }
+   draw_on_canvas(text_to_show)
+}
+function draw_on_canvas(text_to_show)
 {
    var canvas = document.getElementById( "canvas_for_clickings" ) ;
    var context = canvas.getContext("2d") ;
+   context.font = "bold 24px serif";
+   var centerWidth = 120;
+   var centerHeight = 40;
 
    // We'll fill the entire canvas with light color.
-
    context.fillStyle = "LightYellow" ;
    context.fillRect( 0, 0, canvas.width, canvas.height ) ;
 
-   context.fillStyle = "Blue" ; 
+   //highlight the clicked area
+   switch(text_to_show)
+   {
+      case "North-West":
+      context.fillStyle = "Lavender";
+      context.fillRect(0, 0, 300, 250);
+      context.fillRect(230, 230, 140, 40);
+      context.strokeRect(230, 230, 140, 40);
+      context.fillStyle = "Teal";
+      context.fillText(text_to_show, 240, 255);
+      break;
+      case "South-West":
+      context.fillStyle = "Lavender";
+      context.fillRect(0, 250 , 300, 250);
+      context.fillRect(230, 230, 140, 40);
+      context.strokeRect(230, 230, 140, 40);
+      context.fillStyle = "Teal";
+      context.fillText(text_to_show, 240, 255);
+      break;
+      case "North-East":
+      context.fillStyle = "Lavender";
+      context.fillRect(300, 0, 300, 250);
+      context.fillRect(230, 230, 140, 40);
+      context.strokeRect(230, 230, 140, 40);
+      context.fillStyle = "Teal";
+      context.fillText(text_to_show, 240, 255);
+      break;
+      case "South-East": 
+      context.fillStyle = "Lavender";
+      context.fillRect(300 , 250, 300, 250);
+      context.fillRect(230, 230, 140, 40);
+      context.strokeRect(230, 230, 140, 40);
+      context.fillStyle = "Teal";
+      context.fillText(text_to_show, 240, 255);
+      break;
+   }
 
-   // The following loop draws all the clicked points each
-   // time this function is called.
+   //draw a box in the center
 
-   context.beginPath() ;
-   context.arc( clicked_point_x,
-                  clicked_point_y,
-                  3, 0, 2 * Math.PI, true ) ;
-   context.closePath() ;
-   context.fill() ;
-
-   context.fillText(
-         text_to_show,
-         clicked_point_x + 7,
-         clicked_point_y ) ;
    
 }
 </script>
@@ -84,7 +131,8 @@ function draw_on_canvas()
 
       <canvas id=canvas_for_clickings
          width=600 height=500
-         onmousedown = "on_mouse_down( event )">
+         onmousedown = "on_mouse_down( event )"
+         onmousemove = "onMouseMove(event)">
       </canvas>
    </div>
 
