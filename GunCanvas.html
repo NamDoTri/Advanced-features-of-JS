@@ -88,6 +88,16 @@ class Shell
 
       context.restore() ; //  Restore the saved drawing context.
    }
+
+   has_reached_target(){
+      return ( this.shell_position_y + this.radius >= this.ground_level_y);
+   }
+   get_position_x(){
+      return this.shell_position_x;
+   }
+   get_position_y(){
+      return this.shell_position_y;
+   }
 }  // The definition of class Shell ends here.
 
 // Next we specify another class named Gun
@@ -155,6 +165,68 @@ class Gun
    }
 }
 
+class Sprite
+{
+   constructor( given_sprite_image,  // An Image() object created by caller.
+                number_of_horizontal_frames,
+                given_sprite_center_point_x,   // x-position on canvas
+                given_sprite_center_point_y )  // y-position on canvas
+   {
+      this.sprite_image = given_sprite_image ;
+      this.number_of_frames = number_of_horizontal_frames ;
+
+      this.sprite_center_point_x = given_sprite_center_point_x ;
+      this.sprite_center_point_y = given_sprite_center_point_y ;
+
+      this.current_frame_index = 0 ;
+
+      this.frame_width = this.sprite_image.width / number_of_horizontal_frames ;
+
+      this.frame_height = this.sprite_image.height ;
+
+      this.sprite_is_alive = true ;
+   }
+
+   sprite_has_finished()
+   {
+      if ( this.sprite_is_alive == false )
+      {
+         return true ;
+      }
+      else
+      {
+         return false ;
+      }
+   }
+
+   draw( context )
+   {
+      
+      if ( this.sprite_is_alive == true )
+      {
+         //  You can think that the parameters below first specify an image,
+         //  then they specify a rectangle within the image, and then they
+         //  specify a rectangle on the canvas. Image data is copied from the
+         //  rectangle inside the image to the rectangle on the canvas.
+
+         context.drawImage( this.sprite_image,
+
+                            this.frame_width * this.current_frame_index, 0,
+                            this.frame_width, this.frame_height,
+
+                            this.sprite_center_point_x - this.frame_width / 2,
+                            this.sprite_center_point_y - this.frame_height / 2,
+                            this.frame_width, this.frame_height ) ;
+
+         this.current_frame_index ++ ;
+
+         if ( this.current_frame_index >= this.number_of_frames )
+         {
+            this.sprite_is_alive = false ;
+         }
+      }
+   }
+} 
 // Here begins the 'main' program.
 
 var GROUND_LEVEL_Y  =  540 ;
@@ -162,7 +234,10 @@ var GROUND_LEVEL_Y  =  540 ;
 var gun = new Gun( 100, GROUND_LEVEL_Y, 60 ) ;
 
 var flying_shells = [] ;
-flying_shells.push(gun.fire());
+
+var shell_explosions = [];
+var explosion = new Image();
+explosion.src = "explosion_frames_72_87x87.png";
 
 function on_mouse_down( event )
 {
@@ -199,6 +274,12 @@ function draw_on_canvas()
       }
    }
 
+   if (shell_explosions.length > 0){
+      for(let e of shell_explosions){
+         e.draw(context);
+      }
+   }
+
    gun.draw( context ) ;
 }
 
@@ -210,14 +291,28 @@ function run_this_application() // This is the 'game loop'
 
    if ( flying_shells.length != 0 )
    {
-      for(shell of flying_shells){
-         shell.move();
+      for(let shell=0; shell< flying_shells.length; shell++){
+         flying_shells[shell].move();
+         if (flying_shells[shell].has_reached_target()){
+            var explosionX = flying_shells[shell].get_position_x();
+            var explosionY = flying_shells[shell].get_position_y();
+
+            flying_shells.splice(shell, 1);
+            shell_explosions.push( new Sprite(explosion,72,explosionX, explosionY)); 
+         }
       }
    }
 
+   var exIndex = 0;
+   
+   while(exIndex < shell_explosions.length){ 
+         if(shell_explosions[exIndex].sprite_has_finished()){           
+            shell_explosions.splice(exIndex,1);
+         }
+         exIndex++;
+   }
    draw_on_canvas() ;
-
-   setTimeout( "run_this_application()", 50 ) ;
+   setTimeout( "run_this_application()", 10 ) ;
 }
 
 </script> <!-- End of JavaScript code. -->
