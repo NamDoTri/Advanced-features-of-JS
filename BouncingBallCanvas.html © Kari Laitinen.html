@@ -122,6 +122,42 @@ class GraphicalObject
    }
 
 } // end of class GraphicalObject
+class CollisionCounter
+{
+   constructor()
+   {
+      this.count = 0 ;
+      this.instance_of_this_class = null ;
+   }
+
+   // get_instance() is a static method inside the class.
+   // It creates a CollisionCounter object (instance) if necessary.
+   
+   static get_instance()
+   {
+      if ( this.instance_of_this_class == null )
+      {
+         this.instance_of_this_class = new CollisionCounter() ;
+      }
+
+      return this.instance_of_this_class ;
+   }
+
+   increment()
+   {
+      this.count ++ ;
+   }
+
+   get_count()
+   {
+      return this.count ;
+   }
+
+   reset()
+   {
+      this.count = 0 ;
+   }
+}
 
 
 // Next we specify a class named Bouncer
@@ -145,6 +181,8 @@ class Bouncer extends GraphicalObject
       // bouncer_direction is an angle in radians. This angle specifies
       // the direction where the bouncer will be moved next.
       this.bouncer_direction  =  Math.random() * Math.PI * 2 ;
+
+      this.collision_counter = CollisionCounter.get_instance();
    }
 
    get_bouncer_radius()
@@ -225,13 +263,14 @@ class Bouncer extends GraphicalObject
          //  The bouncer has hit the northern 'wall' of the bouncing area.
 
          this.bouncer_direction = 2 * Math.PI - this.bouncer_direction ;
+         collision_counter.increment();
       }
 
       if ( this.object_center_point_x - this.bouncer_radius <=
                                                   this.bouncing_area.x )
       {
          //  The western wall has been reached.
-
+         collision_counter.increment();
          this.bouncer_direction = Math.PI - this.bouncer_direction ;
       }
 
@@ -239,7 +278,7 @@ class Bouncer extends GraphicalObject
                    ( this.bouncing_area.y  +  this.bouncing_area.height ) )
       {
          //  Southern wall has been reached.
-
+         collision_counter.increment();
          this.bouncer_direction = 2 * Math.PI - this.bouncer_direction ;
       }
 
@@ -247,7 +286,7 @@ class Bouncer extends GraphicalObject
                      ( this.bouncing_area.x  +  this.bouncing_area.width ) )
       {
          //  Eastern wall reached.
-
+         collision_counter.increment();
          this.bouncer_direction = Math.PI - this.bouncer_direction ;
       }
    }
@@ -443,6 +482,7 @@ class ExplodingBouncer extends RotatingBouncer
 var bouncing_area  =  new Rectangle( 0, 0, 800, 600 ) ;
 var ballsExploded = 0;
 var game_balls = [];
+var collision_counter = CollisionCounter.get_instance();
 
 function on_key_down( event )
 {
@@ -464,6 +504,7 @@ function prepare_a_new_game()
    ballsExploded = 0;
    game_is_played = false;
    game_balls = [] ; // This destroys possible old balls.
+   collision_counter.reset();
 
    var ball_center_x = 100 ;
    var ball_center_y = 225 ;   
@@ -499,9 +540,14 @@ function draw_on_canvas()
    context.fillStyle = "GhostWhite" ;  // background color
    context.fillRect( 0, 0, canvas.width, canvas.height ) ;
 
+   context.fillStyle = "black";
+   context.fillText("Collision: " + collision_counter.get_count() + " times", 20,20)
+
    for (ball of game_balls){
       ball.draw(context);
    }
+
+
 }
 
 function run_this_application()
