@@ -504,8 +504,10 @@ function draw_on_canvas()
 
 function run_this_application()
 {
-   for (ball of game_balls){
-      ball.move();
+   if(game_is_played){
+      for (ball of game_balls){
+         ball.move();
+      }
    }
 
    draw_on_canvas() ;
@@ -517,11 +519,19 @@ function run_this_application()
 
 var mouseDown = (event) => {
    for(ball of game_balls){
-      if(ball.contains_point(event.offsetX, event.offsetY)){
+      if(game_is_played && ball.contains_point(event.offsetX, event.offsetY)){
          ball.explode_ball();
       }
    }
 }
+var game_is_played = false;
+var playGame = (event) => {
+   if(event.keyCode == 32){
+      game_is_played = !game_is_played;
+   }
+}
+
+addEventListener("keypress", playGame);
 
 </script> <!-- End of JavaScript code. -->
 
