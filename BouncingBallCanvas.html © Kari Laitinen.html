@@ -441,7 +441,7 @@ class ExplodingBouncer extends RotatingBouncer
 
 
 var bouncing_area  =  new Rectangle( 0, 0, 800, 600 ) ;
-
+var ballsExploded = 0;
 var game_balls = [];
 
 function on_key_down( event )
@@ -461,6 +461,8 @@ function randomColor(){
 
 function prepare_a_new_game()
 {
+   ballsExploded = 0;
+   game_is_played = false;
    game_balls = [] ; // This destroys possible old balls.
 
    var ball_center_x = 100 ;
@@ -504,16 +506,24 @@ function draw_on_canvas()
 
 function run_this_application()
 {
-   if(game_is_played){
-      for (ball of game_balls){
-         ball.move();
+   if(game_balls.length > 0){
+      if( game_is_played ){
+         for (ball of game_balls){
+            if(!ball.is_exploded()){
+               ball.move();
+            }else{
+               game_balls.splice(game_balls.indexOf(ball),1);
+            }
+         }
       }
+   }else{
+      prepare_a_new_game();
    }
 
    draw_on_canvas() ;
 
    // console.log( " XXX " ) ;
-
+   console.log(ballsExploded, game_is_played);
    setTimeout( "run_this_application()", 20 ) ;
 }
 
